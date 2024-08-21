@@ -21,7 +21,8 @@ describe('URL Validation Middleware', () => {
             .set('Accept', 'application/json');
 
         expect(response.status).toBe(200);
-        expect(response.text).toBe('Request successful');
+
+        expect(response.text).toBe('[{\"url\":\"https://example.com\",\"title\":\"Example Domain\",\"description\":\"No description found\",\"image\":\"No image found\"}]');
     });
 
     it('should reject an invalid URL with missing protocol', async () => {
@@ -65,14 +66,16 @@ describe('URL Validation Middleware', () => {
         expect(response.body.error).toBe('Invalid URL format: https://');
     });
 
-    it('should accept multiple valid URLs', async () => {
+    it('should accept multiple valid URLs Texts, yes title, no image, no description', async () => {
         const response = await request(app)
             .post('/fetch-metadata')
-            .send({ urls: ["https://example.com", "https://anotherexample.com"] }) // Multiple valid URLs
+            .send({ urls: ["https://example.com", "https://express-rate-limit.mintlify.app/quickstart/usage"] }) // Multiple valid URLs
             .set('Accept', 'application/json');
 
         expect(response.status).toBe(200);
-        expect(response.text).toBe('Request successful');
+        expect(response.text).toBe('' +
+            "[{\"url\":\"https://example.com\",\"title\":\"Example Domain\",\"description\":\"No description found\",\"image\":\"No image found\"},{\"url\":\"https://express-rate-limit.mintlify.app/quickstart/usage\",\"title\":\"Usage - express-rate-limit\",\"description\":\"No description found\",\"image\":\"No image found\"}]"
+        );
     });
 
     it('should reject if one of the multiple URLs is invalid', async () => {
