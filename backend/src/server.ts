@@ -13,13 +13,17 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-const rateLimiter = createRateLimiter(5, 60*1000);
-app.use(rateLimiter);
+// const rateLimiter = createRateLimiter(5, 60*1000);
+// app.use(rateLimiter);
 
 app.use("/fetch-metadata", metadataRoutes);
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
+    });
+}
+
+
 
 export default app;

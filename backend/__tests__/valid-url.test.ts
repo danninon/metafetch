@@ -2,6 +2,18 @@ import request from 'supertest';
 import app from '../src/server'; // Adjust the path as needed
 
 describe('URL Validation Middleware', () => {
+    let server: any;
+
+    beforeAll(() => {
+
+        server = app.listen(4000, () => {
+            console.log('Test server running on port 4000');
+        });
+    });
+
+    afterAll((done) => {
+        server.close(done); // Close the server after all tests are done
+    });
     it('should accept a valid URL', async () => {
         const response = await request(app)
             .post('/fetch-metadata')
