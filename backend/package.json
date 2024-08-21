@@ -27,7 +27,8 @@
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
     "helmet": "^7.1.0",
-    "log4js": "^6.9.1"
+    "log4js": "^6.9.1",
+    "xss": "^1.0.15"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

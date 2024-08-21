@@ -53,7 +53,7 @@ describe('URL Validation Middleware', () => {
             .set('Accept', 'application/json');
 
         expect(response.status).toBe(400);
-        expect(response.body.error).toBe('Invalid URL format: www.example.com');
+        expect(response.body.results[0].message).toBe('Invalid URL format: www.example.com');
     });
 
     it('should reject an invalid URL with spaces', async () => {
@@ -63,7 +63,7 @@ describe('URL Validation Middleware', () => {
             .set('Accept', 'application/json');
 
         expect(response.status).toBe(400);
-        expect(response.body.error).toBe('Invalid URL format: https://example .com');
+        expect(response.body.results[0].message).toBe('Invalid URL format: https://example .com');
     });
 
     // could be expanded to every single character
@@ -74,7 +74,7 @@ describe('URL Validation Middleware', () => {
             .set('Accept', 'application/json');
 
         expect(response.status).toBe(400);
-        expect(response.body.error).toBe('Invalid URL format: https://example@.com');
+        expect(response.body.results[0].message).toBe('Invalid URL format: https://example@.com');
     });
 
 
@@ -85,7 +85,7 @@ describe('URL Validation Middleware', () => {
             .set('Accept', 'application/json');
 
         expect(response.status).toBe(400);
-        expect(response.body.error).toBe('Invalid URL format: https://');
+        expect(response.body.results[0].message).toBe('Invalid URL format: https://');
     });
 
 
@@ -96,7 +96,33 @@ describe('URL Validation Middleware', () => {
             .send({ urls: ["https://example.com", "invalid-url"] }) // One valid and one invalid URL
             .set('Accept', 'application/json');
 
+        // Since one of the URLs is invalid, expect 207 Multi-Status if mixed results are allowed
+        expect(response.status).toBe(207);
+
+        // Check that the response contains both the valid and invalid URL results
+        expect(response.body).toEqual([
+            {
+                url: "https://example.com",
+                title: "Example Domain",
+                description: "No description found",
+                image: "No image found"
+            },
+            {
+                url: "invalid-url",
+                status: "error",
+                message: "Invalid URL format: invalid-url"
+            }
+        ]);
+    });
+
+    it('should return an error for an unreachable URL', async () => {
+        const testUrl = "https://thisurldoesnotexist12345.com";
+
+        const response = await request(app)
+            .post('/fetch-metadata')
+            .send({ urls: [testUrl] });
+
         expect(response.status).toBe(400);
-        expect(response.body.error).toBe('Invalid URL format: invalid-url');
+        expect(response.body.results[0].message).toBe(`URL ${testUrl} Unreachable`);
     });
 });
