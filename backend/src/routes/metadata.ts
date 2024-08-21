@@ -24,14 +24,24 @@ function validateUrls(req: Request, res: Response, next: NextFunction) {
 // Function to check if a URL is valid
 function isValidUrl(url: string): boolean {
     try {
+        // Basic check using the URL constructor
         new URL(url);
+
+        // Additional regex validation to ensure proper URL structure
+        const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+
+        if (!urlPattern.test(url)) {
+            throw new Error(`Invalid URL format: ${url}`);
+        }
+
         logger.info(`Valid URL format: ${url}`);
         return true;
-    } catch {
+    } catch (error) {
         logger.warn(`Invalid URL format: ${url}`);
         return false;
     }
 }
+
 
 router.post(
     "/",
