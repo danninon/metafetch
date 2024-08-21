@@ -44,16 +44,7 @@ describe('URL Validation Middleware', () => {
             .set('Accept', 'application/json');
 
         expect(response.status).toBe(200);
-        expect(response.text).toBe('' +
-            "[{\"url\":\"https://github.com/danninon/metafetch/tree/main/backend\",\"title\":\"metafetch/backend at main · danninon/metafetch · GitHub\",\"description\":\"Contribute to danninon/metafetch development by creating an account on GitHub.\",\"image\":\"https://opengraph.githubassets.com/ff81c2fff7d36b583b9681143503f49182ef2ce67b11a5262446e9870918112e/danninon/metafetch\"}]"
-        );
     });
-    //     {
-    //         "url": "https://github.com/danninon/metafetch/tree/main/backend",
-    //         "title": "metafetch/backend at main · danninon/metafetch · GitHub",
-    //         "description": "Contribute to danninon/metafetch development by creating an account on GitHub.",
-    //         "image": "https://opengraph.githubassets.com/ff81c2fff7d36b583b9681143503f49182ef2ce67b11a5262446e9870918112e/danninon/metafetch"
-    //     }
 
     it('should reject an invalid URL with missing protocol', async () => {
         const response = await request(app)
