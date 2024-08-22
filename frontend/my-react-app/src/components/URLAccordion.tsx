@@ -105,7 +105,7 @@ const URLAccordion: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="container">
             <HealthCheck onStatusChange={setServerConnected} />
             {urlEntries.map((entry, index) => (
                 <div key={index} className="accordion-item">
@@ -132,10 +132,11 @@ const URLAccordion: React.FC = () => {
                     )}
                 </div>
             ))}
-            <button onClick={handleAddEntry}>+</button>
-            <button onClick={handleSendAll} disabled={!serverConnected || urlEntries.every(entry => !entry.url)}>Send All</button>
+            <button className="add-button" onClick={handleAddEntry}>+</button>
+            <button className="send-button" onClick={handleSendAll} disabled={!serverConnected || urlEntries.every(entry => !entry.url)}>Send All</button>
         </div>
     );
+
 };
 
 export default URLAccordion;
