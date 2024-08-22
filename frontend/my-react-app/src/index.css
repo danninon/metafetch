@@ -1,0 +1,123 @@
+/* General Body Styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace;
+}
+
+/* General Accordion Styles */
+.accordion-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  max-width: 960px; /* Constrain the max width for better readability */
+  margin: 10px auto; /* Center the accordion items on the page */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+/* Input and Button Styling */
+.accordion-item input[type="text"] {
+  width: calc(100% - 100px); /* Adjust width considering the button size */
+  padding: 8px;
+  margin-right: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.accordion-item button {
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.accordion-item button:hover {
+  background-color: #0056b3;
+}
+
+.accordion-item button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Response Styling */
+.success-response {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #c3e6cb;
+  background-color: #d4edda;
+  border-radius: 4px;
+}
+
+.error-response {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #f5c6cb;
+  background-color: #f8d7da;
+  border-radius: 4px;
+  color: #721c24;
+}
+
+/* Image Styling in Success Response */
+.success-response img {
+  width: 100%;  /* Ensure the image takes the full width of its container */
+  height: auto; /* Maintain aspect ratio */
+  max-height: 200px; /* Limit the height to keep the image from being too tall */
+  border-radius: 4px;
+  margin: 10px auto; /* Center the image and provide spacing */
+  display: block; /* Make the image a block element for centered margin */
+}
+
+/* Typography Styling for Response Titles and Descriptions */
+.success-response h4 {
+  margin-top: 10px;
+  color: #155724;
+  font-size: 18px;
+}
+
+.success-response p {
+  margin: 5px 0 0;
+  color: #155724;
+  font-size: 14px;
+}
+
+/* Button to Add More URLs */
+.add-button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background-color: #218838;
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 600px) {
+  .accordion-item input[type="text"] {
+    width: calc(100% - 20px); /* Full width on smaller screens */
+    margin-bottom: 10px;
+  }
+
+  .success-response img, .error-response, .success-response {
+    padding: 5px; /* Reduce padding on smaller screens */
+  }
+}
