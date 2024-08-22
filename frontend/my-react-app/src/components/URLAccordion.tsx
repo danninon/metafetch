@@ -57,7 +57,9 @@ const URLAccordion: React.FC = () => {
             console.log(response);
 
             const newEntries = urlEntries.map((entry, index) => {
+                console.log("7");
                 if (urls[index] === "placeholder") {
+                    console.log("5");
                     return {
                         ...entry,
                         response: {
@@ -69,7 +71,7 @@ const URLAccordion: React.FC = () => {
                 }
                 return {
                     ...entry,
-                    response: response.data.results[index]
+                    response: response.data[index]
                 };
             });
 
@@ -79,6 +81,7 @@ const URLAccordion: React.FC = () => {
             if (error.response && error.response.data && error.response.data.results) {
                 const newEntries = urlEntries.map((entry, index) => {
                     if (urls[index] === "placeholder") {
+                        console.log(3);
                         return {
                             ...entry,
                             response: {
@@ -95,6 +98,7 @@ const URLAccordion: React.FC = () => {
                 });
                 setUrlEntries(newEntries);
             } else {
+                console.log(4);
                 console.error("Unexpected error:", error.message || error);
             }
         }
