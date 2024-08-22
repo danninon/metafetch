@@ -23,8 +23,6 @@ interface UrlEntry {
 
 const URLAccordion: React.FC = () => {
     const [urlEntries, setUrlEntries] = useState<UrlEntry[]>([
-        { url: '', response: null, isImage: false },
-        { url: '', response: null, isImage: false },
         { url: '', response: null, isImage: false }
     ]);
     const [serverConnected, setServerConnected] = useState<boolean>(false);
@@ -32,7 +30,16 @@ const URLAccordion: React.FC = () => {
     const handleInputChange = (index: number, value: string) => {
         const newEntries = [...urlEntries];
         newEntries[index].url = value;
-        newEntries[index].isImage = /\.(jpeg|jpg|gif|png|svg)$/i.test(value);  // Reintroduce image check
+        newEntries[index].isImage = /\.(jpeg|jpg|gif|png|svg)$/i.test(value);
+        setUrlEntries(newEntries);
+    };
+
+    const handleAddEntry = () => {
+        setUrlEntries([...urlEntries, { url: '', response: null, isImage: false }]);
+    };
+
+    const handleRemoveEntry = (index: number) => {
+        const newEntries = urlEntries.filter((_, i) => i !== index);
         setUrlEntries(newEntries);
     };
 
@@ -41,26 +48,61 @@ const URLAccordion: React.FC = () => {
             console.log("Send cancelled, server is disconnected");
             return;
         }
-        const urls = urlEntries.map(entry => entry.url).filter(url => url);
+
+        const urls = urlEntries.map(entry => entry.url || "placeholder");
+        console.log(urls);
+
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/fetch-metadata`, { urls });
-            const newEntries = urlEntries.map((entry, index) => ({
-                ...entry,
-                response: response.data[index]
-            }));
+            console.log(response);
+
+            const newEntries = urlEntries.map((entry, index) => {
+                if (urls[index] === "placeholder") {
+                    return {
+                        ...entry,
+                        response: {
+                            url: entry.url,
+                            status: "Error",
+                            message: "You cannot send an empty line"
+                        } as ErrorResult
+                    };
+                }
+                return {
+                    ...entry,
+                    response: response.data.results[index]
+                };
+            });
+
             setUrlEntries(newEntries);
-        } catch (error: unknown) {  // Explicitly declare the type as unknown
-            if (error instanceof Error) {
-                console.error("Error in sending URLs:", error.message);
+
+        } catch (error: any) {
+            if (error.response && error.response.data && error.response.data.results) {
+                const newEntries = urlEntries.map((entry, index) => {
+                    if (urls[index] === "placeholder") {
+                        return {
+                            ...entry,
+                            response: {
+                                url: entry.url,
+                                status: "Error",
+                                message: "You cannot send an empty line"
+                            } as ErrorResult
+                        };
+                    }
+                    return {
+                        ...entry,
+                        response: error.response.data.results[index]
+                    };
+                });
+                setUrlEntries(newEntries);
             } else {
-                console.error("Error in sending URLs:", error);
+                console.error("Unexpected error:", error.message || error);
             }
         }
     };
 
     return (
         <div>
-            <HealthCheck onStatusChange={setServerConnected}/>
+            <HealthCheck onStatusChange={setServerConnected} />
             {urlEntries.map((entry, index) => (
                 <div key={index} className="accordion-item">
                     <input
@@ -70,6 +112,7 @@ const URLAccordion: React.FC = () => {
                         placeholder="Enter URL"
                         disabled={!serverConnected}
                     />
+                    <button onClick={() => handleRemoveEntry(index)} disabled={urlEntries.length === 1}>-</button>
                     {entry.response && (
                         'status' in entry.response ? (
                             <div className="error-response">
@@ -85,6 +128,7 @@ const URLAccordion: React.FC = () => {
                     )}
                 </div>
             ))}
+            <button onClick={handleAddEntry}>+</button>
             <button onClick={handleSendAll} disabled={!serverConnected || urlEntries.every(entry => !entry.url)}>Send All</button>
         </div>
     );
