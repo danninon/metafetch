@@ -104,4 +104,4 @@ To run the backend tests, use:
 3. **HTTP Requests Only**:
    - The server is currently configured to accept only HTTP requests. HTTPS is not enabled on the server at this time.
 
-![img.png](img.png)
+![img.png](static/img.png)
