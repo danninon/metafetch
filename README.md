@@ -1,5 +1,6 @@
 # My Fullstack Application
 
+
 ## Project Structure
 
 - **Backend**: Located in the `/backend` directory.
@@ -86,3 +87,21 @@ To run the backend tests, use:
 3. **Structured Data Handling**:
    - **Trade-Off**: Requiring explicit structure in data handling can increase the complexity of form management and validation.
    - **Why I Picked This**: This approach was chosen to ensure that data sent to the server is consistently formatted, reducing the risk of errors and making it easier to validate inputs on both the client and server sides. This structure also makes the application more predictable and easier to debug.
+
+### Demo Server:
+1. **AWS Server Deployment**:
+   - The backend server has been deployed to AWS using an EC2 instance. You can access it via the following URL:
+     ```plaintext
+     http://ec2-34-205-252-225.compute-1.amazonaws.com:3000
+     ```
+
+2. **Health Check Endpoint**:
+   - A health check endpoint has been added to monitor the server's status. You can check the server's health by sending a request to:
+     ```plaintext
+     http://ec2-34-205-252-225.compute-1.amazonaws.com:3000/health
+     ```
+
+3. **HTTP Requests Only**:
+   - The server is currently configured to accept only HTTP requests. HTTPS is not enabled on the server at this time.
+
+![img.png](img.png)
