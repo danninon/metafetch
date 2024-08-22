@@ -23,6 +23,8 @@ interface UrlEntry {
 
 const URLAccordion: React.FC = () => {
     const [urlEntries, setUrlEntries] = useState<UrlEntry[]>([
+        { url: '', response: null, isImage: false },
+        { url: '', response: null, isImage: false },
         { url: '', response: null, isImage: false }
     ]);
     const [serverConnected, setServerConnected] = useState<boolean>(false);
@@ -45,21 +47,21 @@ const URLAccordion: React.FC = () => {
 
     const handleSendAll = async () => {
         if (!serverConnected) {
-            console.log("Send cancelled, server is disconnected");
             return;
         }
 
         const urls = urlEntries.map(entry => entry.url || "placeholder");
-        console.log(urls);
+        const placeholderCount = urls.filter(url => url === "placeholder").length;
+
+        if (urls.length - placeholderCount < 3) {
+            alert("You must provide 3 or more URL's");
+            return;
+        }
 
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/fetch-metadata`, { urls });
-            console.log(response);
-
             const newEntries = urlEntries.map((entry, index) => {
-                console.log("7");
                 if (urls[index] === "placeholder") {
-                    console.log("5");
                     return {
                         ...entry,
                         response: {
@@ -81,7 +83,6 @@ const URLAccordion: React.FC = () => {
             if (error.response && error.response.data && error.response.data.results) {
                 const newEntries = urlEntries.map((entry, index) => {
                     if (urls[index] === "placeholder") {
-                        console.log(3);
                         return {
                             ...entry,
                             response: {
@@ -98,7 +99,6 @@ const URLAccordion: React.FC = () => {
                 });
                 setUrlEntries(newEntries);
             } else {
-                console.log(4);
                 console.error("Unexpected error:", error.message || error);
             }
         }
